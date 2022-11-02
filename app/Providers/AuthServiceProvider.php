@@ -36,35 +36,35 @@ class AuthServiceProvider extends ServiceProvider
 				->view('email.verify', compact('url'));
 		});
 
-//		VerifyEmail::createUrlUsing(function ($notifiable) {
-//			$params = [
-//				'expires' => Carbon::now()
-//					->addMinutes(60)
-//					->getTimestamp(),
-//				'id'   => $notifiable->getKey(),
-//				'hash' => sha1($notifiable->getEmailForVerification()),
-//			];
-//
-//			ksort($params);
-//
-//			// then create API url for verification. my API have `/api` prefix,
-//			// so I don't want to show that url to users
-//			$url = URL::route('verification.verify', $params);
-//
-//			// get APP_KEY from config and create signature
-//			$key = config('app.key');
-//			$signature = hash_hmac('sha256', $url, $key);
+		VerifyEmail::createUrlUsing(function ($notifiable) {
+			$params = [
+				'expires' => Carbon::now()
+					->addMinutes(60)
+					->getTimestamp(),
+				'id'   => $notifiable->getKey(),
+				'hash' => sha1($notifiable->getEmailForVerification()),
+			];
 
-			// generate url for yous SPA page to send it to user
-//			return 'http://localhost:5173/';
-//				'email/verify/' .
-//				$params['id'] .
-//				'/' .
-//				$params['hash'] .
-//				'?expires=' .
-//				$params['expires'] .
-//				'&signature=' .
-//				$signature;
-//		});
+			ksort($params);
+
+			// then create API url for verification. my API have `/api` prefix,
+			// so I don't want to show that url to users
+			$url = URL::route('verification.verify', $params);
+
+			// get APP_KEY from config and create signature
+			$key = config('app.key');
+			$signature = hash_hmac('sha256', $url, $key);
+
+			//generate url for yous SPA page to send it to user
+			return 'http://localhost:5173' .
+				'/email-verify/' .
+				$params['id'] .
+				'/' .
+				$params['hash'] .
+				'?expires=' .
+				$params['expires'] .
+				'&signature=' .
+				$signature;
+		});
 	}
 }
