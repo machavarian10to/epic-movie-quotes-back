@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\VerifyEmailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,5 +17,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+	return $request->user();
 });
+
+Route::middleware(['auth:api'])->group(function () {
+	Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+Route::get('/email-verify/{id}/{hash}', [AuthController::class, 'verify'])
+//	->middleware(['auth'])
+	->name('verification.verify');
+
+//Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+//	->middleware(['signed', 'throttle:6,1'])
+//	->name('verification.verify');
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
