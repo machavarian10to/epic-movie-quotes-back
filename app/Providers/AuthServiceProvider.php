@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -29,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
 	{
 		$this->registerPolicies();
 
+		// Create custom blade file for user verification
 		VerifyEmail::toMailUsing(function ($notifiable, $url) {
 			return (new MailMessage())
 				->subject('Please verify your Email Address')
@@ -36,6 +38,7 @@ class AuthServiceProvider extends ServiceProvider
 				->view('email.verify', compact('url'));
 		});
 
+		// Create custom url for user verification
 		VerifyEmail::createUrlUsing(function ($notifiable) {
 			$params = [
 				'expires' => Carbon::now()
@@ -47,15 +50,14 @@ class AuthServiceProvider extends ServiceProvider
 
 			ksort($params);
 
-			// then create API url for verification. my API have `/api` prefix,
-			// so I don't want to show that url to users
+			// then create API url for verification
 			$url = URL::route('verification.verify', $params);
 
 			// get APP_KEY from config and create signature
 			$key = config('app.key');
 			$signature = hash_hmac('sha256', $url, $key);
 
-			//generate url for yous SPA page to send it to user
+			//generate url for Vue SPA page to send it to user
 			return 'http://localhost:5173' .
 				'/email-verify/' .
 				$params['id'] .
@@ -66,5 +68,13 @@ class AuthServiceProvider extends ServiceProvider
 				'&signature=' .
 				$signature;
 		});
+
+		// Create custom blade file for password reset
+//		ResetPassword::toMailUsing(function ($notifiable, $token) {
+//			$url = 'http://localhost:5173/reset-password?token=' . $token . '?email=' . $notifiable->getEmailForPasswordReset();
+//			return (new MailMessage())
+//				->subject('Reset your password')
+//				->view('email.reset', compact('url'));
+//		});
 	}
 }

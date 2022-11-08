@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\JsonResponse;
 
@@ -27,7 +24,6 @@ class AuthController extends Controller
 
 		return response()->json([
 			'status'       => 'success',
-			'message'      => 'User created successfully',
 			'user'         => auth()->user(),
 			'access_token' => $token,
 			'token_type'   => 'bearer',
@@ -36,33 +32,9 @@ class AuthController extends Controller
 	}
 
 	public function verify(EmailVerificationRequest $request): JsonResponse
-    {
+	{
 		$request->fulfill();
 
-//		$user = User::find($request->route('id'));
-//
-//		if ($user->hasVerifiedEmail())
-//		{
-//			return redirect(env('FRONT_URL') . '/email/verify/already-success');
-//		}
-//
-//		if ($user->markEmailAsVerified())
-//		{
-//			event(new Verified($user));
-//		}
-//
-//		return redirect(env('FRONT_URL') . '/email/verify/success');
-//		$user = User::find($request->route('id'));
-//		if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification())))
-//		{
-//			throw new AuthorizationException();
-//		}
-//		if ($user->hasVerifiedEmail())
-//		{
-//			$user->markEmailAsVerified();
-//
-//			event(new Verified($user));
-//		}
 		return response()->json('User verified successfully');
 	}
 

@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\VerifyEmailController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\GoogleController;
+use App\Http\Controllers\PasswordResetRequestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,14 +26,14 @@ Route::middleware(['auth:api'])->group(function () {
 	Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::controller(AuthController::class)->group(function () {
+	Route::post('/register', 'register')->name('register');
+	Route::get('/email-verify/{id}/{hash}', 'verify')->name('verification.verify');
+	Route::post('/login', 'login')->name('login');
+});
 
-Route::get('/email-verify/{id}/{hash}', [AuthController::class, 'verify'])
-    ->name('verification.verify');
+Route::post('/forgot-password', [PasswordResetRequestController::class, 'sendEmail'])->name('forgot.password');
+Route::post('/reset-password', [ChangePasswordController::class, 'passwordReset'])->name('reset.password');
 
-//	->middleware(['auth', 'signed'])
-//Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-//	->middleware(['signed', 'throttle:6,1'])
-//	->name('verification.verify');
-
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/google/redirect', [GoogleController::class, 'redirect'])->name('google.redirect');
+Route::get('/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
