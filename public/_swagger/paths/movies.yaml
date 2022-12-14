@@ -1,0 +1,167 @@
+paths:
+  /movies:
+    get:
+      tags:
+        - Movie
+      security:
+          - bearerAuth: []
+      summary: Returns all movies
+      responses:
+        "200":
+          $ref: "../responses/movies.yaml#/components/responses/movies/200"
+        "401":
+          $ref: "../common.yaml#/components/responses/401"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+    post:
+      tags:
+        - Movie
+      security:
+        - bearerAuth: []
+      summary: add new Movie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Madara Uchiha
+                  minLength: 2
+                file:
+                  type: string
+                  format: binary
+                price:
+                  type: number
+                  minimum: 0
+                  example: 100
+                wholesale_price:
+                  type: number
+                  minimum: 0
+                  example: 50
+                SQ:
+                  type: string
+                  minLength: 2
+                  example: 0000-0001
+                categoryIds:
+                  type: array
+                  items:
+                    type: integer
+                  example:
+                    - 1
+                    - 2
+                    - 3
+              required:
+                - name
+                - price
+                - wholesale_price
+                - SQ
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../schemas/product.yaml#/components/schemas/Product"
+                  - type: object
+                    properties:
+                      categories:
+                        type: array
+                        items:
+                          type: string
+                          $ref: "../schemas/category.yaml#/components/schemas/Category"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+
+  /products/{id}:
+    get:
+      tags:
+        - Product
+      summary: Returns an single product
+      parameters:
+        - $ref: "../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          $ref: "../responses/products.yaml#/components/responses/products/200"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+    put:
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+      summary: Update Product
+      parameters:
+        - $ref: "../common.yaml#/components/parameters/id"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Madara Uchiha
+                  minLength: 2
+                file:
+                  type: string
+                  format: binary
+                price:
+                  type: number
+                  minimum: 0
+                  example: 100
+                wholesale_price:
+                  type: number
+                  minimum: 0
+                  example: 50
+                SQ:
+                  type: string
+                  minLength: 2
+                  example: 0000-0001
+                categoryIds:
+                  type: array
+                  items:
+                    type: integer
+                  example:
+                    - 1
+                    - 2
+                    - 3
+              required:
+                - name
+                - price
+                - wholesale_price
+                - SQ
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "../schemas/product.yaml#/components/schemas/Product"
+                  - type: object
+                    properties:
+                      categories:
+                        type: array
+                        items:
+                          type: string
+                          $ref: "../schemas/category.yaml#/components/schemas/Category"
+        "404":
+          $ref: "../common.yaml#/components/responses/404"
+    delete:
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+      summary: Delete Product
+      parameters:
+        - $ref: "../common.yaml#/components/parameters/id"
+      responses:
+        "200":
+          description: OK
+        "404":
+          $ref: "../common.yaml#/components/responses/404"

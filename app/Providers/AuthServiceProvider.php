@@ -3,11 +3,12 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
-use Illuminate\Auth\Notifications\ResetPassword;
+use App\Guards\JwtGuard;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 
 class AuthServiceProvider extends ServiceProvider
@@ -29,6 +30,11 @@ class AuthServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->registerPolicies();
+
+         // Custom guard for private channels
+		Auth::extend('jwt', function ($app, $name, array $config) {
+			return new JwtGuard(Auth::createUserProvider($config['provider']));
+		});
 
 		// Create custom blade file for user verification
 		VerifyEmail::toMailUsing(function ($notifiable, $url) {
@@ -58,7 +64,7 @@ class AuthServiceProvider extends ServiceProvider
 			$signature = hash_hmac('sha256', $url, $key);
 
 			//generate url for Vue SPA page to send it to user
-			return 'http://localhost:5173' .
+			return 'http://127.0.0.1:5173' .
 				'/email-verify/' .
 				$params['id'] .
 				'/' .
@@ -68,13 +74,5 @@ class AuthServiceProvider extends ServiceProvider
 				'&signature=' .
 				$signature;
 		});
-
-		// Create custom blade file for password reset
-//		ResetPassword::toMailUsing(function ($notifiable, $token) {
-//			$url = 'http://localhost:5173/reset-password?token=' . $token . '?email=' . $notifiable->getEmailForPasswordReset();
-//			return (new MailMessage())
-//				->subject('Reset your password')
-//				->view('email.reset', compact('url'));
-//		});
 	}
 }
