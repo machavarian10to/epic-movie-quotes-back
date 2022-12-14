@@ -13,7 +13,7 @@ class GoogleController extends Controller
 	public function redirect(): JsonResponse
 	{
 		$url = Socialite::driver('google')->stateless()->redirect()->getTargetUrl();
-		return response()->json(['url' => $url]);
+		return response()->json(['url' => $url], 200);
 	}
 
 	public function callback(): JsonResponse
@@ -53,6 +53,6 @@ class GoogleController extends Controller
 
 		$cookie = cookie('access_token', $jwt, 60, '/', config('auth.front_end_top_level_domain'), true, true, false, 'Strict');
 
-		return response()->json(['user' => $newUser])->withCookie($cookie);
+		return response()->json(['user' => $newUser], 200)->withCookie($cookie);
 	}
 }

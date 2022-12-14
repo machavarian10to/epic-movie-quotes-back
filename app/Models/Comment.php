@@ -10,16 +10,16 @@ class Comment extends Model
 {
 	use HasFactory;
 
-	protected $guarded = [];
+	protected $guarded = ['id'];
 
-    public $with = ['user'];
+	public $with = ['user'];
 
 	public function quote(): BelongsTo
 	{
 		return $this->belongsTo(Quote::class);
 	}
 
-    public function user(): BelongsTo
+	public function user(): BelongsTo
 	{
 		return $this->belongsTo(User::class);
 	}

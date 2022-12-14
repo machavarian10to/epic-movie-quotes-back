@@ -11,7 +11,7 @@ class QuoteController extends Controller
 {
 	public function index(): JsonResponse
 	{
-		return response()->json(['quotes' => Quote::latest()->with('movie')->paginate(2)]);
+		return response()->json(['quotes' => Quote::latest()->with('movie')->paginate(2)], 200);
 	}
 
 	public function store(StoreQuoteRequest $request): JsonResponse
@@ -29,12 +29,12 @@ class QuoteController extends Controller
 			'user_id'      => jwtUser()->id,
 		]);
 
-		return response()->json(['status' => 'Quote added successfully']);
+		return response()->json(['status' => 'Quote added successfully'], 200);
 	}
 
 	public function show(Quote $quote): JsonResponse
 	{
-		return response()->json(['quote' => $quote]);
+		return response()->json(['quote' => $quote], 200);
 	}
 
 	public function update(UpdateQuoteRequest $request, Quote $quote): JsonResponse
@@ -54,14 +54,14 @@ class QuoteController extends Controller
 			$quote->update(['image' => $file_name]);
 		}
 
-		return response()->json(['status' => 'Quote updated successfully']);
+		return response()->json(['status' => 'Quote updated successfully'], 200);
 	}
 
 	public function destroy(Quote $quote): JsonResponse
 	{
 		$quote->delete();
 
-		return response()->json(['status' => 'Quote deleted successfully']);
+		return response()->json(['status' => 'Quote deleted successfully'], 200);
 	}
 
 	public function search(): JsonResponse
@@ -77,7 +77,7 @@ class QuoteController extends Controller
 						  ->orWhere('name->ka', 'LIKE', '%' . substr($keyword, 1) . '%');
 				})->with('movie')->get();
 
-				return response()->json(['quotes' => $quotes]);
+				return response()->json(['quotes' => $quotes], 200);
 			}
 
 			if ($keyword[0] === '#')
@@ -87,9 +87,9 @@ class QuoteController extends Controller
 					->orWhere('name->ka', 'LIKE', '%' . substr($keyword, 1) . '%')
 					->with('movie')->get();
 
-				return response()->json(['quotes' => $quotes]);
+				return response()->json(['quotes' => $quotes], 200);
 			}
 		}
-		return response()->json(['quotes' => Quote::latest()->with('movie')->get()]);
+		return response()->json(['quotes' => Quote::latest()->with('movie')->get()], 200);
 	}
 }

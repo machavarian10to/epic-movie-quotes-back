@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddEmailRequest;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\Email;
 use App\Models\User;
@@ -24,7 +25,7 @@ class AuthController extends Controller
 		]);
 		event(new Registered($user));
 
-		return response()->json('User registered successfully');
+		return response()->json('User registered successfully', 200);
 	}
 
 	public function verify(Request $request): JsonResponse
@@ -41,17 +42,17 @@ class AuthController extends Controller
 
 		if ($user->hasVerifiedEmail())
 		{
-			return response()->json('User is already verified');
+			return response()->json('User is already verified', 200);
 		}
 
 		if ($user->markEmailAsVerified())
 		{
 			event(new Verified($user));
 		}
-		return response()->json('User verified successfully');
+		return response()->json('User verified successfully', 200);
 	}
 
-	public function login(Request $request): JsonResponse
+	public function login(LoginRequest $request): JsonResponse
 	{
 		$field = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'name' : 'email';
 
@@ -89,7 +90,7 @@ class AuthController extends Controller
 
 		$cookie = cookie('access_token', $jwt, 60, '/', config('auth.front_end_top_level_domain'), true, true, false, 'Strict');
 
-		return response()->json(['user' => auth()->user()])->withCookie($cookie);
+		return response()->json(['user' => auth()->user()], 200)->withCookie($cookie);
 	}
 
 	public function user(): JsonResponse
@@ -98,6 +99,7 @@ class AuthController extends Controller
 			[
 				'user'    => jwtUser(),
 			],
+			200
 		);
 	}
 
@@ -128,14 +130,14 @@ class AuthController extends Controller
 
 		return response()->json([
 			'user'  => $user,
-		]);
+		], 200);
 	}
 
 	public function logout(): JsonResponse
 	{
 		$cookie = cookie('access_token', '', 0, '/', config('auth.front_end_top_level_domain'), true, true, false, 'Strict');
 
-		return response()->json('success')->withCookie($cookie);
+		return response()->json('success', 200)->withCookie($cookie);
 	}
 
 	public function addEmail(AddEmailRequest $request): JsonResponse
@@ -147,14 +149,14 @@ class AuthController extends Controller
 
 		jwtUser()->sendEmailVerificationNotification();
 
-		return response()->json(['email' => $email]);
+		return response()->json(['email' => $email], 200);
 	}
 
 	public function deleteEmail(Email $email): JsonResponse
 	{
 		$email->delete();
 
-		return response()->json(['status' => 'Email deleted successfully!']);
+		return response()->json(['status' => 'Email deleted successfully!'], 200);
 	}
 
 	public function makePrimaryEmail(Email $email): JsonResponse
@@ -167,6 +169,6 @@ class AuthController extends Controller
 
 		$email->delete();
 
-		return response()->json(['status' => 'Email become primary successfully!']);
+		return response()->json(['status' => 'Email become primary successfully!'], 200);
 	}
 }

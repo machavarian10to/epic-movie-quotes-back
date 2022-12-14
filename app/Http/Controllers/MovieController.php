@@ -18,7 +18,7 @@ class MovieController extends Controller
 			return $movie->only(['id', 'name', 'image', 'year', 'quotes']);
 		});
 
-		return response()->json(['movies' => $movieDetails]);
+		return response()->json(['movies' => $movieDetails], 200);
 	}
 
 	public function store(StoreMovieRequest $request): JsonResponse
@@ -48,12 +48,12 @@ class MovieController extends Controller
 		$genres = explode(',', $request->genre);
 		$movie->genres()->attach($genres);
 
-		return response()->json(['status' => 'Movie added successfully']);
+		return response()->json(['status' => 'Movie added successfully'], 200);
 	}
 
 	public function show(Movie $movie): JsonResponse
 	{
-		return response()->json(['movie' => $movie]);
+		return response()->json(['movie' => $movie], 200);
 	}
 
 	public function update(UpdateMovieRequest $request, Movie $movie): JsonResponse
@@ -85,19 +85,19 @@ class MovieController extends Controller
 			$request->file('image')->storePubliclyAs('public', $file_name);
 			$movie->update(['image' => $file_name]);
 		}
-		return response()->json(['status' => 'Movie updated successfully']);
+		return response()->json(['status' => 'Movie updated successfully'], 200);
 	}
 
 	public function destroy(Movie $movie): JsonResponse
 	{
 		$movie->delete();
 
-		return response()->json(['status' => 'Movie deleted successfully']);
+		return response()->json(['status' => 'Movie deleted successfully'], 200);
 	}
 
 	public function getGenres(): JsonResponse
 	{
-		return response()->json(['genres' => Genre::all()]);
+		return response()->json(['genres' => Genre::all()], 200);
 	}
 
 	public function search(): JsonResponse
@@ -110,9 +110,9 @@ class MovieController extends Controller
 						->where('name->en', 'LIKE', '%' . $keyword . '%')
 						->orWhere('name->ka', 'LIKE', '%' . $keyword . '%')->get();
 
-			return response()->json(['movies' => $movies]);
+			return response()->json(['movies' => $movies], 200);
 		}
 
-		return response()->json(['movies' => jwtUser()->movies]);
+		return response()->json(['movies' => jwtUser()->movies], 200);
 	}
 }

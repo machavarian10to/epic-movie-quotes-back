@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\LikeEvent;
 use App\Events\NotificationEvent;
+use App\Http\Requests\NotificationRequest;
 use App\Models\Like;
 use App\Models\Notification;
 use App\Models\Quote;
@@ -13,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 
 class LikeController extends Controller
 {
-	public function like(Quote $quote, Request $request): JsonResponse
+	public function like(Quote $quote, NotificationRequest $request): JsonResponse
 	{
 		$like = Like::create([
 			'quote_id' => $quote->id,
@@ -33,7 +34,7 @@ class LikeController extends Controller
 
 		event(new LikeEvent($like));
 
-		return response()->json(['message' => 'Quote is liked successfully']);
+		return response()->json(['message' => 'Quote is liked successfully'], 200);
 	}
 
 	public function unlike(Quote $quote): JsonResponse
@@ -42,20 +43,20 @@ class LikeController extends Controller
 
 		$like->delete();
 
-		return response()->json(['message' => 'Quote is unliked successfully']);
+		return response()->json(['message' => 'Quote is unliked successfully'], 200);
 	}
 
 	public function getLikes(Quote $quote): JsonResponse
 	{
 		$like = Like::where('quote_id', $quote->id)->count();
 
-		return response()->json(['like' => $like]);
+		return response()->json(['like' => $like], 200);
 	}
 
 	public function checkLikes(Quote $quote): JsonResponse
 	{
 		$like = Like::where('quote_id', $quote->id)->where('user_id', jwtUser()->id)->count();
 
-		return response()->json(['like' => $like]);
+		return response()->json(['like' => $like], 200);
 	}
 }

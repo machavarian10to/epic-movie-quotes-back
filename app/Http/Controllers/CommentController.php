@@ -12,9 +12,9 @@ use Illuminate\Http\JsonResponse;
 
 class CommentController extends Controller
 {
-	public function index(Quote $quote)
+	public function index(Quote $quote): JsonResponse
 	{
-		return response()->json(['comments' => $quote->comments]);
+		return response()->json(['comments' => $quote->comments], 200);
 	}
 
 	public function store(StoreCommentRequest $request, Quote $quote): JsonResponse
@@ -37,6 +37,6 @@ class CommentController extends Controller
 
 		event(new CommentEvent($comment));
 
-		return response()->json(['status' => 'Comment added successfully']);
+		return response()->json(['status' => 'Comment added successfully'], 200);
 	}
 }
