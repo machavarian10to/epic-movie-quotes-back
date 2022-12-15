@@ -3,7 +3,27 @@ components:
     User:
       allOf:
         - $ref: "../common.yaml#/components/schemas/Id"
-        # - type: object
-        # properties:
-        # Other Details
+        - type: object
+          properties:
+              name:
+                type: string
+                example: machavariani
+              email:
+                type: string
+                example: machavariani@mail.com
+              email_verified_at:
+                type: string
+                example: "2022-12-14T13:50:16.000000Z"
+              image:
+                type: string
+                example: /images/image.jpg
+              google_id:
+                type: number
+                example: 123456789
+              emails:
+                schema:
+                  type: array
+
+#              emails:
+#              notifications:
         - $ref: "../common.yaml#/components/schemas/TimeStamps"

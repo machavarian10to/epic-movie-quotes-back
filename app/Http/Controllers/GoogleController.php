@@ -33,7 +33,7 @@ class GoogleController extends Controller
 
 			$cookie = cookie('access_token', $jwt, 60, '/', config('auth.front_end_top_level_domain'), true, true, false, 'Strict');
 
-			return response()->json(['user' => $findUser])->withCookie($cookie);
+			return response()->json(['user' => $findUser], 200)->withCookie($cookie);
 		}
 
 		$newUser = User::create([
