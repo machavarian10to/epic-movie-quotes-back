@@ -3,8 +3,10 @@ paths:
     get:
       tags:
         - Movie
+#      security:
+#          - Auth: []
       security:
-          - Auth: []
+        - bearerAuth: []
       summary: returns all movies
       responses:
         "200":

@@ -11,7 +11,7 @@ servers:
 
 components:
   securitySchemes:
-    Auth:
+    bearerAuth:
       type: apiKey
       in: header
       name: Authorization
@@ -22,12 +22,9 @@ components:
 #      scheme: bearer
 #      bearerFormat: JWT
 
-
-
 paths:
   /login:
    $ref: "./_swagger/paths/auth.yaml#/paths/~1login"
-
 
   # /user:
   # $ref: "./_swagger/paths/auth.yaml#/paths/~1user"
@@ -35,20 +32,9 @@ paths:
   /movies:
     $ref: "./_swagger/paths/movies.yaml#/paths/~1movies"
 
-
 #  /products/{id}:
 #    $ref: "./_swagger/paths/products.yaml#/paths/~1products~1{id}"
 
   # /categories:
   # $ref: "./_swagger/paths/categories.yaml#/paths/~1categories"
 
-#  schemas:
-#    User:
-#      allOf:
-#        - $ref: "./_swagger/schemas/user.yaml#/components/schemas/User"
-#    Product:
-#      allOf:
-#        - $ref: "./_swagger/schemas/product.yaml#/components/schemas/Product"
-#    Category:
-#      allOf:
-#        - $ref: "./_swagger/schemas/category.yaml#/components/schemas/Category"
