@@ -4,20 +4,18 @@ paths:
       tags:
         - Movie
       security:
-          - bearerAuth: []
-      summary: Returns all movies
+          - Auth: []
+      summary: returns all movies
       responses:
         "200":
           $ref: "../responses/movies.yaml#/components/responses/movies/200"
         "401":
           $ref: "../common.yaml#/components/responses/401"
-        "404":
-          $ref: "../common.yaml#/components/responses/404"
     post:
       tags:
         - Movie
-      security:
-        - bearerAuth: []
+#      security:
+#        - bearerAuth: []
       summary: add new Movie
       requestBody:
         required: true

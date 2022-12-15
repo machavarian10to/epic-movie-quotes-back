@@ -1,5 +1,34 @@
 paths:
-  # /login:
+   /login:
+     post:
+       tags:
+         - User
+       summary: login user
+       requestBody:
+         required: true
+         content:
+           application/json:
+             schema:
+               type: object
+               properties:
+                 email:
+                   type: string
+                   example: oto@mail
+                 password:
+                   type: string
+                   minimum: 7
+                   example: 12345678
+       responses:
+         "200":
+           description: login successfully
+           content:
+             application/json:
+               schema:
+                 allOf:
+                   - $ref: "../schemas/user.yaml#/components/schemas/User"
+         "401":
+           $ref: "../common.yaml#/components/responses/401"
+
   # /register:
   # /logout:
   # /user:

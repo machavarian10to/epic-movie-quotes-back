@@ -11,14 +11,24 @@ servers:
 
 components:
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    Auth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Jwt
+#  securitySchemes:
+#    bearerAuth:
+#      type: http
+#      scheme: bearer
+#      bearerFormat: JWT
+
+
 
 paths:
-#   /login:
-#    $ref: "./_swagger/paths/auth.yaml#/paths/~1login"
+  /login:
+   $ref: "./_swagger/paths/auth.yaml#/paths/~1login"
+
+
   # /user:
   # $ref: "./_swagger/paths/auth.yaml#/paths/~1user"
 
