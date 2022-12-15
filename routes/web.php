@@ -18,4 +18,4 @@ Route::get('/', static function () {
 	return view('welcome');
 });
 
-Route::get('/swagger', view('swagger'))->name('swagger');
+Route::get('/swagger', fn () => App::isProduction() ? response(status:403) : view('swagger'))->name('swagger');
